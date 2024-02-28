@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ namespace }}-namespace
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: https://github.com/joshuacanter/namespace-demo
+    targetRevision: HEAD
+    path: templates/namespace-config
+    helm:
+      valueFiles:
+      - /clusters/configuration/{{ cluster }}/namespace-config/{{ namespace }}/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops

@@ -1,0 +1,36 @@
+---
+- name: Create OpenShift namespace
+  hosts: localhost
+  connection: local
+
+  tasks:
+      
+  # - name: open pr
+  #   ansible.builtin.uri:
+  #     url: https://api.github.com/repos/joshuacanter/namespace-demo/pulls
+  #     method: POST
+  #     body: 
+  #       title: "{{ namespace }} creation"
+  #       body: Initial creation of {{ namespace }}
+  #       head: "{{ namespace }}-create"
+  #       base: main
+  #     headers:
+  #       Accept: application/vnd.github+json
+  #       X-GitHub-Api-Version: 2022-11-28
+  #       Authorization: Bearer {{ token }}
+
+
+  - name: open pr
+    ansible.builtin.uri:
+      url: https://api.github.com/repos/joshuacanter/namespace-demo/pulls
+      method: POST
+      headers:
+        Authorization: Bearer {{ token }}
+      body:
+        title: "Ansible test"
+        body: "Initial create"
+        head: cli-test
+        base: main
+      body_format: json
+
+
