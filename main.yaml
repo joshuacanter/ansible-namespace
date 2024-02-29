@@ -31,6 +31,8 @@
 
   - name: Check new files into git
     ansible.builtin.shell: |
+      git config --global user.email jcanter@redhat.com
+      git config --global user.name "Ansible Bot"
       git checkout -b {{ namespace }}-create
       git status
       git add clusters/*
