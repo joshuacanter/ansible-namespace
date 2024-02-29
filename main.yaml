@@ -29,41 +29,17 @@
       src: templates/application.yaml.j2
       dest: /tmp/{{ namespace }}/clusters/applications/{{ cluster }}/namespace-config/{{ namespace }}/application.yaml
 
-  - name: change branch
-    ansible.builtin.command: git checkout -b {{ namespace }}-create
+  - name: Check new files into git
+    ansible.builtin.shell: |
+      git checkout -b {{ namespace }}-create
+      git status
+      git add clusters/*
+      git commit -m "Create {{ namespace }}"
+      git remote set-url origin https://{{ user }}:{{ token }}@github.com/joshuacanter/namespace-demo.git
+      git push --set-upstream origin {{ namespace }}-create
     args:
       chdir: "/tmp/{{ namespace }}"
 
-  - name: show status of repo
-    ansible.builtin.command: git status
-    args:
-      chdir: "/tmp/{{ namespace }}"
-    register: git_status
-
-  - name: git status
-    debug:
-     msg: "{{ git_status }}"
-
-  - name: add new files
-    ansible.builtin.command: git add clusters/*
-    args:
-      chdir: "/tmp/{{ namespace }}"
-
-  - name: commit changes
-    ansible.builtin.command: git commit -m "Create {{ namespace }}"
-    args:
-      chdir: "/tmp/{{ namespace }}"
-      
-  - name: add tok
-    ansible.builtin.command: git remote set-url origin https://{{ user }}:{{ token }}@github.com/joshuacanter/namespace-demo.git
-    args:
-      chdir: "/tmp/{{ namespace }}"
-
-  - name: push changes
-    ansible.builtin.command:  git push --set-upstream origin {{ namespace }}-create
-    args:
-      chdir: "/tmp/{{ namespace }}"
-      
   - name: open pr
     ansible.builtin.uri:
       url: https://api.github.com/repos/joshuacanter/namespace-demo/pulls
