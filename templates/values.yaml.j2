@@ -2,5 +2,6 @@ namespace: {{ namespace }}
 
 {% if quota is defined %}
 quota:
-  requests: cpu {{ quota.cpu }}
+  requests: 
+    cpu: {{ quota.cpu }}
 {% endif %}
